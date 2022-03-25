@@ -1,8 +1,7 @@
 import React from 'react'
-import { Grid,Paper, Avatar, TextField, Button, Typography,Link } from '@material-ui/core'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import {Avatar, Button, Checkbox, FormControlLabel, Grid, Link, Paper, TextField, Typography} from "@mui/material";
+
 const Login=({handleChange})=>{
 
     const paperStyle={padding :20,height:'45vh',width:300, margin:"0 auto"}
