@@ -2,8 +2,7 @@
  * Describes AUTH calls
  */
 import {BASE_URL} from "./api-constants";
-import axios from "axios";
-// import axios from "./axios-config"
+import axios from "./axios-config"
 
 
 export class AuthApi {
@@ -42,8 +41,12 @@ export class AuthApi {
     }
 
     static async register(payload) {
-        debugger
         const {data} = await axios.post(`${this.baseURL}/register`, payload)
+        return data
+    }
+
+    static async checkEmail(registrationRequestId){
+        const {data} = await axios.post(`${this.baseURL}/check-email/${registrationRequestId}`)
         return data
     }
 }

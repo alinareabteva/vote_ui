@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import {AuthApi} from "../api/AuthApi"
+import {AuthApi} from "../../../api/AuthApi"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 
 import InputLabel from '@mui/material/InputLabel';
 import NativeSelect from '@mui/material/NativeSelect';
 import {
-    Avatar, Button, Checkbox,
+    Avatar, Checkbox,
     FormControl,
     FormControlLabel,
     FormLabel,
@@ -15,14 +15,15 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import CustomDatePicker from "../primitives/CustomDatePicker/CustomDatePicker";
+import CustomDatePicker from "../../../primitives/CustomDatePicker/CustomDatePicker";
+import {LoadingButton} from "@mui/lab";
 
 const paperStyle = {padding: 20, width: 300, margin: "0 auto"}
 const headerStyle = {margin: 0}
 const avatarStyle = {backgroundColor: '#1bbd7e'}
 const marginTop = {marginTop: 7}
 
-const Signup = () => {
+const SignupForm = ({registrationSuccessCallback}) => {
 
     const [state, setState] = useState({
         firstName: "",
@@ -37,7 +38,8 @@ const Signup = () => {
         email: "",
         password: "",
         education: null,
-        hasAcceptedTermsAndConditions: false
+        hasAcceptedTermsAndConditions: false,
+        loading: false
     })
 
     const onChange = ({target: {name, value}}) => {
@@ -54,13 +56,23 @@ const Signup = () => {
         }))
     }
 
+    const setLoading = (loading) => setState(prevState => ({
+        ...prevState,
+        loading
+    }))
+
     const onSubmit = (e) => {
         e.preventDefault();
-        AuthApi.register(state).then(user => {
-            console.log(user)
-            //TODO:
-            debugger
-        })
+        setLoading(true)
+        const {loading, ...payload} = state;
+        AuthApi.register(payload)
+            .then(user => {
+                setLoading(false)
+                registrationSuccessCallback && registrationSuccessCallback(user)
+            })
+            .catch(e => {
+                setLoading(false)
+            })
     }
 //TODO: add formik for field validation and state management
 
@@ -83,7 +95,7 @@ const Signup = () => {
                                value={state.idnp}/>
 
                     {/* TODO: set max date as per voter: 18+*/}
-                    <CustomDatePicker label="Date of Birth" onChange={onChangeDate} value={state.birthDate} />
+                    <CustomDatePicker label="Date of Birth" onChange={onChangeDate} value={state.birthDate}/>
                     <TextField fullWidth label='Country' placeholder="Enter your country" onChange={onChange}
                                name="country" value={state.country}/>
                     <TextField fullWidth label='Region' placeholder="Enter your region" onChange={onChange}
@@ -91,7 +103,8 @@ const Signup = () => {
 
                     <FormControl component="fieldset" style={marginTop}>
                         <FormLabel component="legend">Locality</FormLabel>
-                        <RadioGroup aria-label="localityType" name="localityType" style={{display: 'initial'}} value={state.localityType} onChange={onChange}>
+                        <RadioGroup aria-label="localityType" name="localityType" style={{display: 'initial'}}
+                                    value={state.localityType} onChange={onChange}>
                             <FormControlLabel value="city" control={<Radio value="CITY"/>} label="City"/>
                             <FormControlLabel value="village" control={<Radio value="VILLAGE"/>} label="Village"/>
                         </RadioGroup>
@@ -117,7 +130,7 @@ const Signup = () => {
                             value={state.education}
                             onChange={onChange}
                         >
-                            <option value={null}> -- Select an option -- </option>
+                            <option value={null}> -- Select an option --</option>
                             <option value="SECONDARY">Secondary Education</option>
                             <option value="TECHNICAL">Technical Education</option>
                             <option value="HIGHER">Higher Education</option>
@@ -131,14 +144,16 @@ const Signup = () => {
                     <TextField fullWidth label='Password' placeholder="Enter your password" onChange={onChange}
                                name="password" value={state.password}/>
                     <FormControlLabel
-                        control={<Checkbox name="hasAcceptedTermsAndConditions" value={state.hasAcceptedTermsAndConditions} onChange={onChange}/>}
+                        control={<Checkbox name="hasAcceptedTermsAndConditions"
+                                           value={state.hasAcceptedTermsAndConditions} onChange={onChange}/>}
                         label="I accept the terms and conditions."
                     />
-                    <Button type='submit' variant='contained' color='primary' onClick={onSubmit}>Sign up</Button>
+                    <LoadingButton loading={state.loading} type='submit' variant='contained' color='primary'
+                                   onClick={onSubmit}>Sign up</LoadingButton>
                 </form>
             </Paper>
         </Grid>
     )
 }
 
-export default Signup;
+export default SignupForm;

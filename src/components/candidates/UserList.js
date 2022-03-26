@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { GlobalContext } from "../../context/GlobalState";
+import React  from 'react';
 import { Link } from "react-router-dom";
 import {
   ListGroup,
@@ -8,7 +7,8 @@ import {
 } from "reactstrap";
 
 export const UserList = () => {
-  const { users, removeUser } = useContext(GlobalContext);
+  //TODO: add to state
+  const { users = [], removeUser } = {};
 
   return (
     <ListGroup className="mt-4">

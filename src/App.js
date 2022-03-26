@@ -1,43 +1,32 @@
 import React from 'react';
 import './App.css';
-import SignInOutContainer from './containers';
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import { Home } from "./components/candidates/Home";
-import { AddUser } from "./components/candidates/AddUser";
-import { EditUser } from "./components/candidates/EditUser";
-import { GlobalProvider } from "./context/GlobalState";
-
-import Login from "./components/Login";
-import Signup from "./components/Signup";
+import {BrowserRouter as Router} from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import VotOnlineRoutes from "./layout/VotOnlineRoutes";
 
+import {composeWithDevTools} from 'redux-devtools-extension';
+import {applyMiddleware, createStore} from "redux";
+import rootReducer from "./redux/reducers/root-reducer";
+import thunk from "redux-thunk";
+import {Provider} from "react-redux";
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 function App() {
-  return (
-    <div className="App">
-     <SignInOutContainer/>
 
+    return (
+        <Provider store={store}>
+            <div className="App">
+                <div style={{maxWidth: "30rem", margin: "4rem auto"}}>
+                    <Router>
+                        <VotOnlineRoutes/>
+                    </Router>
+                </div>
+            </div>
+        </Provider>
 
-    <div style={{ maxWidth: "30rem", margin: "4rem auto" }}>
-      <GlobalProvider>
-        <Router>
-            {/* <Route exact path="/" component={() => <Home users={users} setUsers={setUsers} />} /> */}
-          <Routes>
-            <Route exact path="/" component={Login} />
-            <Route path="/signup" component={Signup} />
-            {/*<Route path="/home" component={Home} />*/}
-            {/*<Route path="/add" component={AddUser} />*/}
-            {/*<Route path="/edit/:id" component={EditUser} />*/}
-          </Routes>
-
-            
-        </Router>
-      </GlobalProvider>
-  </div>
-  </div>
-
-  );
+    );
 }
 
 export default App;
