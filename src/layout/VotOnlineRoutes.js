@@ -18,7 +18,7 @@ const VotOnlineRoutes = () => {
             dispatch(setCurrentUser(user))
         }).catch(e => {
             tokenUtility.clear();
-            if (!location.pathname?.includes(ROUTES_PATHS.LOGIN_PAGE)){
+            if (!location.pathname?.includes(ROUTES_PATHS.SUBMIT_EMAIL_VERIFICATION_PAGE.replace(":id", ""))){
                 navigate(ROUTES_PATHS.LOGIN_PAGE)
             }
         })
