@@ -1,17 +1,26 @@
-import React, {useContext, useEffect, useMemo} from 'react';
-import {Route, Routes} from "react-router-dom";
-import {ROUTES_ACCESS_LEVEL, VOT_ONLINE_PAGES} from "./routes-constants";
+import React, {useEffect, useMemo} from 'react';
+import {Route, Routes, useLocation} from "react-router-dom";
+import {ROUTES_ACCESS_LEVEL, ROUTES_PATHS, VOT_ONLINE_PAGES} from "./routes-constants";
 import {useDispatch, useSelector} from "react-redux";
 import {AuthApi} from "../api/AuthApi";
 import {setCurrentUser} from "../redux/actions/auth-actions";
+import tokenUtility from "../api/tokenUtility";
+import {useNavigate} from "react-router";
 
 const VotOnlineRoutes = () => {
+    const navigate = useNavigate();
     const {currentUser} = useSelector(state => state?.auth)
     const dispatch = useDispatch();
+    const location = useLocation();
 
     useEffect(() => {
         AuthApi.getMe().then(user => {
             dispatch(setCurrentUser(user))
+        }).catch(e => {
+            tokenUtility.clear();
+            if (!location.pathname?.includes(ROUTES_PATHS.LOGIN_PAGE)){
+                navigate(ROUTES_PATHS.LOGIN_PAGE)
+            }
         })
     }, [])
 
