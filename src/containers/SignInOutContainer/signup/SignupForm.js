@@ -130,7 +130,7 @@ const SignupForm = ({registrationSuccessCallback}) => {
                             value={state.education}
                             onChange={onChange}
                         >
-                            <option value={null}> -- Select an option --</option>
+                            <option value=""> -- Select an option --</option>
                             <option value="SECONDARY">Secondary Education</option>
                             <option value="TECHNICAL">Technical Education</option>
                             <option value="HIGHER">Higher Education</option>

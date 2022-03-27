@@ -67,11 +67,11 @@ const Login = ({handleChange}) => {
     }
 
     return (
-        <Grid>
+        <form>
             <Paper style={paperStyle}>
                 <Grid align='center'>
                     <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
-                    <h2>Sign In</h2>
+                    <h3>Sign In</h3>
                 </Grid>
                 <TextField label='Login' placeholder='Enter login' fullWidth required name="login" onChange={onChange}/>
                 <TextField label='Password' placeholder='Enter password' type='password'  name="password" fullWidth required onChange={onChange}/>
@@ -104,7 +104,7 @@ const Login = ({handleChange}) => {
                     </Link>
                 </Typography>
             </Paper>
-        </Grid>
+        </form>
     )
 }
 
