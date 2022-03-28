@@ -28,14 +28,11 @@ const useLoginPageState = () => {
             password: Yup.string().required('Required'),
             code: Yup.string()
                 .when(['shouldShowConfirmationCode'], (shouldShowConfirmationCode) => {
-                    debugger
                     if (shouldShowConfirmationCode) {
                         return Yup.string().required();
                     }
                 })
         }),
-        validateOnChange: true,
-        validateOnBlur: false,
         onSubmit: values => {
             const {login, password, shouldShowConfirmationCode, code} = values;
             setLoading(true);
@@ -54,9 +51,15 @@ const useLoginPageState = () => {
                 }
             })
                 .catch(e => {
-                    console.log(e)
+                    console.error(e)
+                    const errMessage = e?.response?.data?.message;
+                    if (errMessage?.includes('code')) {
+                        formik.setErrors({...formik.errors, code: errMessage})
+                    }
+                    if (['email', 'login', 'password', 'credentials'].some(key => errMessage?.includes(key))) {
+                        formik.setErrors({...formik.errors, login: errMessage})
+                    }
                     //TODO: display errors on form
-                    debugger
                 })
 
                 .finally(e => {

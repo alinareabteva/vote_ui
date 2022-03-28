@@ -12,13 +12,8 @@ export class AuthApi {
      * Method to receive tokens
      */
     static async login(loginDto) {
-        try {
-            const {data} = await axios.post(`${this.baseURL}/login`, loginDto);
-            return data;
-        } catch (e) {
-            console.error(e);
-        }
-        return {};
+        const {data} = await axios.post(`${this.baseURL}/login`, loginDto);
+        return data;
     }
 
     /**
@@ -45,7 +40,7 @@ export class AuthApi {
         return data
     }
 
-    static async checkEmail(registrationRequestId){
+    static async checkEmail(registrationRequestId) {
         const {data} = await axios.post(`${this.baseURL}/check-email/${registrationRequestId}`)
         return data
     }
