@@ -24,6 +24,12 @@ const VotOnlineRoutes = () => {
         })
     }, [])
 
+    useEffect(() => {
+        if (currentUser?.id && location.pathname?.includes(ROUTES_PATHS.LOGIN_PAGE)) {
+            navigate(ROUTES_PATHS.HOME_PAGE)
+        }
+    }, [currentUser?.id])
+
     let mappedRoutes = useMemo(() => {
         return VOT_ONLINE_PAGES.filter(routeProps => routeProps.permission === ROUTES_ACCESS_LEVEL.PRIVATE ? !!currentUser : true)
     }, [currentUser])

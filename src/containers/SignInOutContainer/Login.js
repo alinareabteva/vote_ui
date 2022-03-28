@@ -6,64 +6,89 @@ import tokenUtility from "../../api/tokenUtility";
 import {LoadingButton} from "@mui/lab";
 import {useDispatch} from "react-redux";
 import {setCurrentUser} from "../../redux/actions/auth-actions";
-import {useNavigate} from "react-router";
-import {ROUTES_PATHS} from "../../layout/routes-constants";
+import {useFormik} from "formik";
+import * as Yup from 'yup';
 
 const paperStyle = {padding: 20, height: '45vh', width: 300, margin: "0 auto"}
 const avatarStyle = {backgroundColor: '#1bbd7e'}
 const btnstyle = {margin: '8px 0'}
 
-const Login = ({handleChange}) => {
+const useLoginPageState = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [state, setState] = useState({
-        login: "",
-        password: "",
-        code: "",
-        shouldShowConfirmationCode: false,
-        loading: false,
-        signInDisabled: false
-    })
-
-    const onChange = ({target: {name, value}}) => {
-        setState(prevState => ({
-            ...prevState,
-            [name]: value
-        }))
-    }
-
-    const onClickSignIn = (e) => {
-        e.preventDefault()
-        const {login, password, shouldShowConfirmationCode, code} = state;
-        setState(prevState => ({
-            ...prevState,
-            loading: true
-        }))
-        AuthApi.login({
-            login,
-            password,
-            ...(shouldShowConfirmationCode && code && {code})
-        }).then(data => {
-            setState(prevState => {
-                if (!prevState.shouldShowConfirmationCode) {
-                    return {
-                        ...prevState,
-                        shouldShowConfirmationCode: true
+    const formik = useFormik({
+        initialValues: {
+            login: "",
+            password: "",
+            code: "",
+            shouldShowConfirmationCode: false,
+            loading: false,
+        },
+        validationSchema: Yup.object({
+            login: Yup.string().required('Required'),
+            password: Yup.string().required('Required'),
+            code: Yup.string()
+                .when(['shouldShowConfirmationCode'], (shouldShowConfirmationCode) => {
+                    debugger
+                    if (shouldShowConfirmationCode) {
+                        return Yup.string().required();
                     }
-                } else  {
+                })
+        }),
+        validateOnChange: true,
+        validateOnBlur: false,
+        onSubmit: values => {
+            const {login, password, shouldShowConfirmationCode, code} = values;
+            setLoading(true);
+            AuthApi.login({
+                login,
+                password,
+                ...(shouldShowConfirmationCode && code && {code})
+            }).then(data => {
+                if (!formik.values.shouldShowConfirmationCode) {
+                    formik.setFieldValue('shouldShowConfirmationCode', true)
+                } else {
                     tokenUtility.setTokens(data)
                     AuthApi.getMe().then(data => {
                         dispatch(setCurrentUser(data))
-                        navigate(ROUTES_PATHS.HOME_PAGE)
                     })
                 }
             })
-        }).finally(e => {
-            setState(prevState => ({
-                ...prevState,
-                loading: false
-            }))
-        })
+                .catch(e => {
+                    console.log(e)
+                    //TODO: display errors on form
+                    debugger
+                })
+
+                .finally(e => {
+                    setLoading(false)
+                })
+        }
+    })
+
+    const setLoading = (loading) => formik.setFieldValue('loading', loading)
+
+    const createDefaultPropsForTextField = (fieldName) => {
+        return {
+            onChange: formik.handleChange,
+            value: formik.values[fieldName],
+            error: formik.touched[fieldName] && Boolean(formik.errors[fieldName]),
+            helperText: formik.touched[fieldName] && formik.errors[fieldName],
+            onBlur: formik.handleBlur
+        }
+    }
+
+    return {
+        formik,
+        createDefaultPropsForTextField
+    }
+}
+
+
+const Login = ({handleChange}) => {
+    const {formik, createDefaultPropsForTextField} = useLoginPageState();
+    const onClickSignIn = (e) => {
+        e.preventDefault()
+        formik.submitForm();
     }
 
     return (
@@ -73,12 +98,15 @@ const Login = ({handleChange}) => {
                     <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
                     <h3>Sign In</h3>
                 </Grid>
-                <TextField label='Login' placeholder='Enter login' fullWidth required name="login" onChange={onChange}/>
-                <TextField label='Password' placeholder='Enter password' type='password'  name="password" fullWidth required onChange={onChange}/>
-                {state.shouldShowConfirmationCode && (
+                <TextField label='Login' placeholder='Enter login' fullWidth required
+                           name="login" {...createDefaultPropsForTextField('login')}/>
+                <TextField label='Password' placeholder='Enter password' type='password' name="password" fullWidth
+                           required {...createDefaultPropsForTextField('password')}/>
+                {formik.values.shouldShowConfirmationCode && (
                     <>
                         <Typography>To your email was sent security code, please, enter it below</Typography>
-                        <TextField label='Confirmation Code' placeholder='Enter security code' name="code" fullWidth required onChange={onChange}/>
+                        <TextField label='Confirmation Code' placeholder='Enter security code' name="code" fullWidth
+                                   required {...createDefaultPropsForTextField('code')}/>
                     </>
                 )}
                 <FormControlLabel
@@ -90,7 +118,10 @@ const Login = ({handleChange}) => {
                     }
                     label="Remember me"
                 />
-                <LoadingButton type='submit' color='primary' variant="contained" style={btnstyle} loading={state.loading} fullWidth disabled={state.signInDisabled} onClick={onClickSignIn}>
+                <LoadingButton type='submit' color='primary' variant="contained" style={btnstyle}
+                               loading={formik.values.loading} fullWidth
+                               disabled={!formik.dirty && Object.keys(formik.errors)?.length > 0}
+                               onClick={onClickSignIn}>
                     Sign in
                 </LoadingButton>
                 <Typography>
