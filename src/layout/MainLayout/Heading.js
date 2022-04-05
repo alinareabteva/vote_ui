@@ -1,14 +1,22 @@
 import React from 'react';
 import {AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import {MENU_PAGES} from "../routes-constants";
+import {MENU_PAGES, ROUTES_PATHS} from "../routes-constants";
 import {StyledNavLink} from "../../components/candidates/CandidatesList/candidates-styles";
+import {useNavigate} from "react-router";
+import tokenUtility from "../../api/tokenUtility";
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = [
+    {
+        title: 'Logout',
+        name: 'logout'
+    }
+]
 
 
 export const Heading = () => {
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -26,6 +34,14 @@ export const Heading = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const handleSettingClick = (settingName) => {
+        switch (settingName) {
+            case 'logout':
+                tokenUtility.clear();
+                navigate(ROUTES_PATHS.LOGIN_PAGE)
+        }
+    }
 
     return (
         <AppBar position="static">
@@ -118,8 +134,8 @@ export const Heading = () => {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                <MenuItem key={setting.name} onClick={() => handleSettingClick(setting.name)}>
+                                    <Typography textAlign="center">{setting.title}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
