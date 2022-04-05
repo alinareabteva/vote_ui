@@ -44,7 +44,7 @@ const EditCandidate = () => {
 
     return (
         <>
-            {state.candidate && <CandidateForm submitHandler={submitForm} initialValues={state.candidate}/>}
+            {state.candidate && <CandidateForm submitHandler={submitForm} formTitle="Edit Candidate" submitButtonTitle="Edit Candidate" initialValues={state.candidate}/>}
         </>
     );
 };

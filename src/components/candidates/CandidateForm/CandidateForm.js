@@ -7,12 +7,12 @@ import {LoadingButton} from "@mui/lab";
 import {MAX_BIRTH_DATE, MIN_BIRTH_DATE, useCandidateFormState} from "./useCandidateFormState";
 import {CandidateFormWrapper} from "./CandidateFormStyles";
 
-const CandidateForm = ({initialValues, submitHandler}) => {
+const CandidateForm = ({initialValues, submitButtonTitle = 'Add Candidate', formTitle = 'Add Candidate', submitHandler}) => {
     const {formik, createDefaultPropsForTextField} = useCandidateFormState({initialValues, submitHandler});
     return (
         <CandidateFormWrapper>
             <form onSubmit={formik.handleSubmit}>
-                <h1> Add candidate </h1>
+                <h1> {formTitle} </h1>
                 <TextField
                     fullWidth
                     label='First Name'
@@ -95,7 +95,7 @@ const CandidateForm = ({initialValues, submitHandler}) => {
                 />
                 <LoadingButton loading={formik.values.loading}
                                disabled={!formik.dirty || Object.keys(formik.errors)?.length > 0} type='submit'
-                               variant='contained' color='primary'>Add Candidate</LoadingButton>
+                               variant='contained' color='primary'>{submitButtonTitle}</LoadingButton>
             </form>
 
         </CandidateFormWrapper>
