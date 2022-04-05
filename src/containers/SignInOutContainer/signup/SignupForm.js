@@ -42,7 +42,7 @@ const useSignupFormState = (registrationSuccessCallback) => {
             birthDate: null,
             gender: "",
             localityType: "",
-            education: null,
+            education: "",
             userName: "",
             email: "",
             password: "",
@@ -94,7 +94,6 @@ const useSignupFormState = (registrationSuccessCallback) => {
                 })
                 .catch(e => {
                     //TODO: set errors in the form
-                    debugger
                     setLoading(false)
                 })
         }
@@ -125,7 +124,6 @@ const useSignupFormState = (registrationSuccessCallback) => {
         createDefaultPropsForTextField
     }
 }
-
 
 const SignupForm = ({registrationSuccessCallback}) => {
     const {formik, onSubmit, createDefaultPropsForTextField} = useSignupFormState(registrationSuccessCallback);

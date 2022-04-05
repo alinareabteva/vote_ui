@@ -18,11 +18,9 @@ function App() {
     return (
         <Provider store={store}>
             <div className="App">
-                <div style={{maxWidth: "30rem", margin: "4rem auto"}}>
-                    <Router>
-                        <VotOnlineRoutes/>
-                    </Router>
-                </div>
+                <Router>
+                    <VotOnlineRoutes/>
+                </Router>
             </div>
         </Provider>
 
