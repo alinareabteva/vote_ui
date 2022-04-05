@@ -1,12 +1,13 @@
 import React from 'react';
-import { Heading } from "./Heading";
-import { UserList } from "./UserList";
+import { Heading } from "../../layout/MainLayout/Heading";
+import { CandidateList } from "./CandidatesList/CandidateList";
+import AddCandidate from "./AddCandidate/AddCandidate";
 
 export const Home = () => {
   return (
     <>
-      <Heading />
-      <UserList />
+      {/*TODO: create voting here*/}
+      {/*<AddCandidate />*/}
     </>
   )
 }

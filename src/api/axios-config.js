@@ -2,6 +2,7 @@ import axios from 'axios';
 import {BASE_URL} from './api-constants';
 import {AuthApi} from "./AuthApi";
 import tokenUtility from "./tokenUtility";
+import {ROUTES_PATHS} from "../layout/routes-constants";
 
 
 const instance = axios.create({
@@ -10,6 +11,8 @@ const instance = axios.create({
         'Content-Type': 'application/json',
     },
 });
+
+const PUBLIC_APIS = ['/auth/login', '/auth/me', '/auth/token/refresh']
 
 instance.interceptors.request.use(
     (config) => {
@@ -32,7 +35,7 @@ instance.interceptors.response.use(
     async (err) => {
         const originalConfig = err.config;
         if (
-            !['/auth/login', '/auth/me']
+            !PUBLIC_APIS
                 .some((path) => originalConfig?.url?.includes(path)) &&
             err.response
         ) {
@@ -45,6 +48,7 @@ instance.interceptors.response.use(
 
                     return instance(originalConfig);
                 } catch (_error) {
+                    window?.location?.replace(window.location.path + '/' + ROUTES_PATHS.LOGIN_PAGE)
                     return Promise.reject(_error);
                 }
             }
