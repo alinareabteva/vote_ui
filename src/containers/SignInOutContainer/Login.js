@@ -9,7 +9,7 @@ import {setCurrentUser} from "../../redux/actions/auth-actions";
 import {useFormik} from "formik";
 import * as Yup from 'yup';
 
-const paperStyle = {padding: 20, height: '45vh', width: 300, margin: "0 auto"}
+const paperStyle = {padding: 20, height: '65vh', width: 300, margin: "0 auto"}
 const avatarStyle = {backgroundColor: '#1bbd7e'}
 const btnstyle = {margin: '8px 0'}
 

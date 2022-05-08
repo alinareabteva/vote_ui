@@ -27,6 +27,7 @@ const paperStyle = {padding: 20, width: 300, margin: "0 auto"}
 const headerStyle = {margin: 0}
 const avatarStyle = {backgroundColor: '#1bbd7e'}
 const marginTop = {marginTop: 7}
+const marginTopEducat = {marginTop: 35}
 
 const MIN_BIRTH_DATE = moment().subtract(115, 'years');
 const MAX_BIRTH_DATE = moment().endOf('day').subtract(18, 'years');
@@ -205,7 +206,7 @@ const SignupForm = ({registrationSuccessCallback}) => {
                         </RadioGroup>
                     </FormControl>
 
-                    <FormControl fullWidth>
+                    <FormControl fullWidth >
                         <InputLabel variant="standard" htmlFor="uncontrolled-native">
                             Education
                         </InputLabel>
@@ -216,14 +217,14 @@ const SignupForm = ({registrationSuccessCallback}) => {
                             }}
                             {...createDefaultPropsForTextField('education')}
                         >
-                            <option value=""> -- Select an option --</option>
+                            <option value=""> </option>
                             <option value="SECONDARY">Secondary Education</option>
                             <option value="TECHNICAL">Technical Education</option>
                             <option value="HIGHER">Higher Education</option>
                         </NativeSelect>
                     </FormControl>
 
-                    <TextField
+                    <TextField style={marginTopEducat}
                         fullWidth label='Email'
                         placeholder="Enter your email"
                         name="email"
