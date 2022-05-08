@@ -31,7 +31,7 @@ const VotOnlineRoutes = () => {
     }, [currentUser?.id])
 
     let mappedRoutes = useMemo(() => {
-        if (currentUser && !currentUser?.roles?.includes("ADMIN")) {
+        if (currentUser && !currentUser?.roles?.some(r => r.name === "ADMIN")) {
             return VOT_ONLINE_PAGES.filter(routeProps => routeProps.permission === ROUTES_ACCESS_LEVEL.PUBLIC || routeProps.path === ROUTES_PATHS.HOME_PAGE)
         }
         return VOT_ONLINE_PAGES.filter(routeProps => routeProps.permission === ROUTES_ACCESS_LEVEL.PRIVATE ? !!currentUser : true)

@@ -30,8 +30,6 @@ export const Home = () => {
 
     }, [currentVoting])
 
-
-
     return (
         <HomePageWrapper>
             <h1>Elections</h1>
