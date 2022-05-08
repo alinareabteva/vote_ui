@@ -23,6 +23,7 @@ export const useElectionFormState = ({initialValues = defaultInitialFormValues, 
                 //TODO
                 .required('Required'),
             candidateIds: Yup.array()
+                .min(2, 'You should select at least one candidate')
                 .required('Required')
         }),
         onSubmit: values => {

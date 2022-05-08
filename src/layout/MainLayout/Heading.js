@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {MENU_PAGES, ROUTES_PATHS} from "../routes-constants";
@@ -6,6 +6,8 @@ import {useNavigate} from "react-router";
 import tokenUtility from "../../api/base/tokenUtility";
 import styled from '@emotion/styled'
 import {NavLink} from "react-router-dom";
+import logo from "./logo1.png"
+import {useSelector} from "react-redux";
 
 
 export const StyledNavLink = styled(NavLink)`
@@ -35,6 +37,7 @@ export const Heading = () => {
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const {currentUser} = useSelector(state => state?.auth)
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -58,6 +61,13 @@ export const Heading = () => {
                 navigate(ROUTES_PATHS.LOGIN_PAGE)
         }
     }
+    const menuItems = useMemo(() => {
+        if (currentUser?.roles?.some(r => r.name === "ADMIN")) {
+            return MENU_PAGES
+        }
+        return [];
+    }, [currentUser?.id])
+
 
     return (
         <AppBar position="static">
@@ -69,7 +79,10 @@ export const Heading = () => {
                         component="div"
                         sx={{mr: 2, display: {xs: 'none', md: 'flex'}}}
                     >
-                        LOGO
+                        <StyledNavLink to={ROUTES_PATHS.HOME_PAGE}>
+
+                            <img src={logo} style={{height: '64px'}}/>
+                        </StyledNavLink>
                     </Typography>
 
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
@@ -101,7 +114,7 @@ export const Heading = () => {
                                 display: {xs: 'block', md: 'none'},
                             }}
                         >
-                            {MENU_PAGES.map((page) => (
+                            {menuItems.map((page) => (
                                 <MenuItem key={page.to} onClick={handleCloseNavMenu}>
                                     <Typography textAlign="center">{page.label}</Typography>
                                 </MenuItem>
@@ -117,7 +130,7 @@ export const Heading = () => {
                         LOGO
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                        {MENU_PAGES.map((page) => (
+                        {menuItems.map((page) => (
                             <StyledNavLink
                                 key={page.to}
                                 to={page.to}

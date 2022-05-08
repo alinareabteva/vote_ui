@@ -26,13 +26,18 @@ const CandidateSelectWrapper = styled.div`
   }
 `
 
-const CandidateSelect = ({ candidates, selectedCandidatesIds = [], onSelect }) => {
+const ErrorMessage = styled.label`
+  color: red;
+`
+
+const CandidateSelect = ({ candidates, selectedCandidatesIds = [], onSelect, errors }) => {
     return (
-        <CandidateSelectWrapper>
+        <CandidateSelectWrapper className="candidate-select">
             <FormControl fullWidth>
                 <InputLabel variant="standard" htmlFor="candidates" className="candidates-select-label">
                     Candidates
                 </InputLabel>
+                {!!errors && <ErrorMessage>{errors}</ErrorMessage>}
                 <StyledList id="candidates">
                     {candidates.map(c => (
                         <MenuItem

@@ -1,6 +1,6 @@
 import SignInOutContainer from "../containers/SignInOutContainer";
 import SubmitEmailVerificationContainer from "../containers/SubmitEmailVerificationContainer";
-import {Home} from "../pages/candidates/Home";
+import {Home} from "../pages/home/Home";
 import AddCandidate from "../pages/candidates/AddCandidate/AddCandidate";
 import {CandidateList} from "../pages/candidates/CandidatesList/CandidateList";
 import MainLayout from "./MainLayout/MainLayout";

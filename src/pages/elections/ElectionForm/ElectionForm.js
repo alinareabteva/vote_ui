@@ -57,7 +57,7 @@ const ElectionForm = ({
                     }}
                 />
 
-                <CandidateSelect onSelect={onSelectCandidate} candidates={candidates} selectedCandidatesIds={formik.values.candidateIds}/>
+                <CandidateSelect onSelect={onSelectCandidate} candidates={candidates} selectedCandidatesIds={formik.values.candidateIds} {...createDefaultPropsForTextField('candidateIds')} />
                 <LoadingButton loading={formik.values.loading}
                                disabled={!formik.dirty || Object.keys(formik.errors)?.length > 0} type='submit'
                                variant='contained' color='primary'>{submitButtonTitle}</LoadingButton>
