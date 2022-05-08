@@ -4,7 +4,8 @@ const initialState = {
     addedCandidate: null,
     editedCandidate: null,
     deletedCandidate: null,
-    candidates: []
+    candidates: [],
+    candidatesFetched: false,
 };
 
 export const candidateReducer = (state = initialState, action) => {
@@ -13,6 +14,7 @@ export const candidateReducer = (state = initialState, action) => {
             const {candidates} = action;
             return {
                 ...state,
+                candidatesFetched: true,
                 candidates,
             };
         }

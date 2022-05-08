@@ -1,5 +1,5 @@
 import React from 'react';
-import CandidateForm from "../CandidateForm/CandidateForm";
+import CandidateForm from "../components/CandidateForm/CandidateForm";
 import {CandidatesApi} from "../../../api/CandidatesApi";
 import {setAddedCandidate} from "../../../redux/actions/candidate-actions";
 import {ROUTES_PATHS} from "../../../layout/routes-constants";

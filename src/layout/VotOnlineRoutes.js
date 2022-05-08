@@ -4,7 +4,7 @@ import {ROUTES_ACCESS_LEVEL, ROUTES_PATHS, VOT_ONLINE_PAGES} from "./routes-cons
 import {useDispatch, useSelector} from "react-redux";
 import {AuthApi} from "../api/AuthApi";
 import {setCurrentUser} from "../redux/actions/auth-actions";
-import tokenUtility from "../api/tokenUtility";
+import tokenUtility from "../api/base/tokenUtility";
 import {useNavigate} from "react-router";
 
 const VotOnlineRoutes = () => {

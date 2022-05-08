@@ -7,7 +7,7 @@ export const Home = () => {
   return (
     <>
       {/*TODO: create voting here*/}
-      {/*<AddCandidate />*/}
+      {/*<CreateElection />*/}
     </>
   )
 }

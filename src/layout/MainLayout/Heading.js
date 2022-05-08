@@ -2,9 +2,25 @@ import React from 'react';
 import {AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {MENU_PAGES, ROUTES_PATHS} from "../routes-constants";
-import {StyledNavLink} from "../../components/candidates/CandidatesList/candidates-styles";
 import {useNavigate} from "react-router";
-import tokenUtility from "../../api/tokenUtility";
+import tokenUtility from "../../api/base/tokenUtility";
+import styled from '@emotion/styled'
+import {NavLink} from "react-router-dom";
+
+
+export const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
+  color: white;
+  margin-left: 10px;
+  &.active {
+    text-decoration: underline;
+  }
+  
+  &:hover {
+    font-weight: bold;
+    color: white;
+  }
+`
 
 
 const settings = [

@@ -1,5 +1,5 @@
-import {BASE_URL} from "./api-constants";
-import axios from "./axios-config"
+import {BASE_URL} from "./base/api-constants";
+import axios from "./base/axios-config"
 
 
 export class CandidatesApi {
