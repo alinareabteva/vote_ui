@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router";
 import {CandidatesApi} from "../../../api/CandidatesApi";
-import CandidateForm from "../CandidateForm/CandidateForm";
+import CandidateForm from "../components/CandidateForm/CandidateForm";
 import {ROUTES_PATHS} from "../../../layout/routes-constants";
 
 const EditCandidate = () => {

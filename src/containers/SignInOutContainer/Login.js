@@ -2,7 +2,7 @@ import React from 'react'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {Avatar, Checkbox, FormControlLabel, Grid, Link, Paper, TextField, Typography} from "@mui/material";
 import {AuthApi} from "../../api/AuthApi";
-import tokenUtility from "../../api/tokenUtility";
+import tokenUtility from "../../api/base/tokenUtility";
 import {LoadingButton} from "@mui/lab";
 import {useDispatch} from "react-redux";
 import {setCurrentUser} from "../../redux/actions/auth-actions";

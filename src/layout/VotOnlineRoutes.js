@@ -4,7 +4,7 @@ import {ROUTES_ACCESS_LEVEL, ROUTES_PATHS, VOT_ONLINE_PAGES} from "./routes-cons
 import {useDispatch, useSelector} from "react-redux";
 import {AuthApi} from "../api/AuthApi";
 import {setCurrentUser} from "../redux/actions/auth-actions";
-import tokenUtility from "../api/tokenUtility";
+import tokenUtility from "../api/base/tokenUtility";
 import {useNavigate} from "react-router";
 
 const VotOnlineRoutes = () => {
@@ -31,6 +31,9 @@ const VotOnlineRoutes = () => {
     }, [currentUser?.id])
 
     let mappedRoutes = useMemo(() => {
+        if (currentUser && !currentUser?.roles?.some(r => r.name === "ADMIN")) {
+            return VOT_ONLINE_PAGES.filter(routeProps => routeProps.permission === ROUTES_ACCESS_LEVEL.PUBLIC || routeProps.path === ROUTES_PATHS.HOME_PAGE)
+        }
         return VOT_ONLINE_PAGES.filter(routeProps => routeProps.permission === ROUTES_ACCESS_LEVEL.PRIVATE ? !!currentUser : true)
     }, [currentUser])
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {BASE_URL} from './api-constants';
-import {AuthApi} from "./AuthApi";
+import {AuthApi} from "../AuthApi";
 import tokenUtility from "./tokenUtility";
-import {ROUTES_PATHS} from "../layout/routes-constants";
+import {ROUTES_PATHS} from "../../layout/routes-constants";
 
 
 const instance = axios.create({
