@@ -38,7 +38,7 @@ const SubmitEmailVerificationContainer = () => {
     const onClickGoToSignIn = () => {
         navigate(ROUTES_PATHS.LOGIN_PAGE);
     }
-
+    // TODO: fix visual
     return (
         <div>
             {state.loading && <Spinner/>}

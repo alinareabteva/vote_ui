@@ -129,6 +129,7 @@ const useSignupFormState = (registrationSuccessCallback) => {
 const SignupForm = ({registrationSuccessCallback}) => {
     const {formik, onSubmit, createDefaultPropsForTextField} = useSignupFormState(registrationSuccessCallback);
 //TODO: add formik for field validation and error showing for complex elements
+    {/*//todo: view adjustements: paddings etc*/}
 
     return (
         <Grid>

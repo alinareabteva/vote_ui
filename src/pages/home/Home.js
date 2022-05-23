@@ -36,7 +36,9 @@ export const Home = () => {
             {!!currentVoting?.election && !currentVoting.userVoted && (
               <VotingForm election={currentVoting.election} />
             )}
+            {/*//TODO: create a page for this*/}
             {currentVoting?.userVoted && "User Voted"}
+            {/*//TODO: create a page for this*/}
             {!!currentVoting && !currentVoting.election && "We dont have elections today"}
 
         </HomePageWrapper>
