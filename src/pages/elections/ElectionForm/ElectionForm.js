@@ -50,8 +50,7 @@ const ElectionForm = ({
                     onChange={value => formik.setFieldValue('electionDate', value)}
                     value={moment(formik.values.electionDate)}
                     error={formik.touched.birthDate && Boolean(formik.errors.electionDate)}
-                    /*TODO: don't commit*/
-                    // minDate={moment().add(2, 'w')}
+                    minDate={moment().add(2, 'w')}
                     textFieldProps={{
                         helperText: formik.touched.electionDate && formik.errors.electionDate,
                         error: formik.touched.electionDate && Boolean(formik.errors.electionDate)
