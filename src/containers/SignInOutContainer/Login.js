@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {Avatar, Checkbox, FormControlLabel, Grid, Link, Paper, TextField, Typography} from "@mui/material";
 import {AuthApi} from "../../api/AuthApi";
@@ -33,6 +33,7 @@ const useLoginPageState = () => {
                     }
                 })
         }),
+        validateOnChange: true,
         onSubmit: values => {
             const {login, password, shouldShowConfirmationCode, code} = values;
             setLoading(true);
@@ -52,30 +53,42 @@ const useLoginPageState = () => {
             })
                 .catch(e => {
                     console.error(e)
-                    const errMessage = e?.response?.data?.message;
-                    if (errMessage?.includes('code')) {
-                        formik.setErrors({...formik.errors, code: errMessage})
-                    }
-                    if (['email', 'login', 'password', 'credentials'].some(key => errMessage?.includes(key))) {
-                        formik.setErrors({...formik.errors, login: errMessage})
-                    }
-                    //TODO: display errors on form
+                    const error = e?.response?.data?.message;
+                    const [errorCode, errorMessage] = error.split('|')
+                    formik.setStatus({
+                        ...formik.status,
+                        [errorCode]: errorMessage
+                    })
                 })
-
                 .finally(e => {
                     setLoading(false)
                 })
         }
     })
 
+
     const setLoading = (loading) => formik.setFieldValue('loading', loading)
 
+    const handleChange = (changeEvent) => {
+        const fieldName = changeEvent.target.name;
+        if (formik.status && formik.status[fieldName]) {
+            formik.setFieldTouched(fieldName, false, false);
+
+            formik.setStatus({
+                ...Object.entries(formik.status).filter(([key, value]) => key !== fieldName)
+            })
+        }
+        formik.handleChange(changeEvent);
+
+    }
+
     const createDefaultPropsForTextField = (fieldName) => {
+        const status = formik.status || {}
         return {
-            onChange: formik.handleChange,
+            onChange: handleChange,
             value: formik.values[fieldName],
-            error: formik.touched[fieldName] && Boolean(formik.errors[fieldName]),
-            helperText: formik.touched[fieldName] && formik.errors[fieldName],
+            error: formik.touched[fieldName] &&(Boolean(formik.errors[fieldName]) || Boolean(status[fieldName])),
+            helperText: formik.touched[fieldName] && (formik.errors[fieldName] || status[fieldName]),
             onBlur: formik.handleBlur
         }
     }
