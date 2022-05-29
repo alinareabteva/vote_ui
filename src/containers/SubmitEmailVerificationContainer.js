@@ -1,30 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router";
+import styled from "@emotion/styled";
 import {AuthApi} from "../api/AuthApi";
 import {Spinner} from "reactstrap";
 import {Button} from "@mui/material";
 import {ROUTES_PATHS} from "../layout/routes-constants";
+import {css} from "styled-components";
 
-const bodyStyle = {
-    background: '#fff4a3',
-    marginTop: '10%',
-}
-const text1Style = {
-    fontFamily: 'Raleway, Arial',
-    fontSize: 34,
-    textAlign: 'center',
-    fontWeight: 'bold'
 
-}
-const text2Style = {
-    fontFamily: 'Raleway, Arial',
-    fontSize: 26,
-    textAlign: 'center'
-
-}
-const buttonStyle = {
-    left: '46%'
-}
+const SubmitEmailVerificationContainerWrapper = styled.div`
+  ${(props) => props.loading && css` background: #c0daff;`}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Raleway, Arial;
+  text-align: center;
+  
+  h1 {
+    font-size: 34px;
+  }
+  
+  p {
+    font-size: 26px;
+    
+  }
+  
+  
+`
 
 const SubmitEmailVerificationContainer = () => {
     const params = useParams();
@@ -48,11 +51,13 @@ const SubmitEmailVerificationContainer = () => {
                         loading: false,
                         registrationRequest,
                     }))
-                }).catch(errors => setState(prevState => ({
-                ...prevState,
-                loading: false,
-                errors
-            })))
+                }).catch(errors => {
+                setState(prevState => ({
+                    ...prevState,
+                    loading: false,
+                    errors
+                }))
+            })
         }
     },[params?.id])
 
@@ -61,19 +66,19 @@ const SubmitEmailVerificationContainer = () => {
     }
 
     return (
-        <div style={bodyStyle}>
+        <SubmitEmailVerificationContainerWrapper loading={state.loading + ''}>
             {state.loading && <Spinner/>}
             {!state.loading && !!state.registrationRequest && (
 
-                <div class="success-submitting">
-                    <h1 style={text1Style}>Congratulations!</h1>
-                    <p style={text2Style}>Your email has been confirmed and registration is finished.</p>
-                    <p style={text2Style}> Now you're able to Sign in </p>
-                    <Button variant="contained" color="success" style={buttonStyle} onClick={onClickGoToSignIn}>Go to Sign In</Button>
+                <div className="success-submitting">
+                    <h1>Congratulations!</h1>
+                    <p>Your email has been confirmed and registration is finished.</p>
+                    <p> Now you're able to Sign in </p>
+                    <Button variant="contained" color="success" onClick={onClickGoToSignIn}>Go to Sign In</Button>
                 </div>
             )}
             {state.errors && state.errors}
-        </div>
+        </SubmitEmailVerificationContainerWrapper>
     );
 };
 

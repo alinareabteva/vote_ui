@@ -9,17 +9,17 @@ const submitStyle = {
     '@media (min-width:150px)': {
         fontSize: 16,
     },
-    lineHeight: 8,
-    left: '35%',
-    margin: 0
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    marginTop: '5rem'
 }
 const emailStyle = {
-    position: 'absolute',
     color: '#7c795d',
     fontFamily: 'Trocchi',
     fontSize: 26,
-    lineHeight: 12,
-    left: '25%'
 }
 
 const SignupComponent = () => {
@@ -35,18 +35,22 @@ const SignupComponent = () => {
         })
     }
 
-     return (
-        <div className="signup">
+    return (
+        <>
             {registrationState.submitted ? (
-                <span style={submitStyle}>
+                <div style={submitStyle}>
                     To submit your registration, please verify email:
+                    <br/>
                     <b style={emailStyle}>{registrationState?.registrationRequest?.user?.email}</b>
-                </span>
+                </div>
 
             ) : (
-                <SignupForm registrationSuccessCallback={registrationSuccessCallback}/>
+                <div className="signup">
+                    <SignupForm registrationSuccessCallback={registrationSuccessCallback}/>
+                </div>
             )}
-        </div>
+        </>
+
     );
 };
 
