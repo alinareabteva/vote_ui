@@ -10,6 +10,7 @@ import {ElectionsApi} from "../../api/ElectionsApi";
 import {setElections} from "../../redux/actions/election-actions";
 import {ROUTES_PATHS} from "../../layout/routes-constants";
 import moment from "moment";
+import SimpleModal from "../../primitives/modal/SimpleModal";
 
 
 export const ElectionsMainPage = () => {
@@ -19,6 +20,11 @@ export const ElectionsMainPage = () => {
     const [state, setState] = useState({
         selected: new Set(),
         elections
+    })
+
+    const [errors, setErrors] = useState({
+        errors: {},
+        showErrors: false
     })
 
 
@@ -61,10 +67,24 @@ export const ElectionsMainPage = () => {
             ElectionsApi.getElections()
                 .then(data => dispatch(setElections(data)))
         }).catch(e => {
-                //TODO
+            debugger
+            // {Object.entries(errors?.errors).map(([key, value]) => <div>{key + " :"  +value }</div>)}
+               setErrors({
+                   showErrors: true,
+                   errors: e?.response?.data
+               })
             }
         )
     }
+
+    const setShowErrors = (showErrors) => {
+        setErrors(prevState => ({
+            ...prevState,
+            showErrors
+        }));
+    }
+
+    const onClickCloseErrorModal = () => setShowErrors(false);
 
     return (
         <TableContainer className="elections-list">
@@ -117,6 +137,12 @@ export const ElectionsMainPage = () => {
 
 
             </Table>
+            <SimpleModal
+                open={errors.showErrors}
+                onClose={onClickCloseErrorModal}
+            >
+                {Object.entries(errors.errors).map(([key, value]) => (key + ': ' + value))}
+            </SimpleModal>
         </TableContainer>
     )
 }
