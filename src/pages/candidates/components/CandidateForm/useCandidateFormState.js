@@ -7,15 +7,15 @@ export const MAX_BIRTH_DATE = moment().endOf('day').subtract(18, 'years');
 
 const defaultInitialFormValues = {
     firstName: "",
-        lastName: "",
-        idnp: "",
-        birthDate: null,
-        gender: "",
-        education: "NONE",
-        email: "",
-        numberOfSignatures: undefined,
-        loading: false,
-        party: ""
+    lastName: "",
+    idnp: "",
+    birthDate: null,
+    gender: "",
+    education: "NONE",
+    email: "",
+    numberOfSignatures: undefined,
+    loading: false,
+    party: ""
 }
 
 export const useCandidateFormState = ({initialValues = defaultInitialFormValues, submitHandler}) => {
@@ -32,7 +32,7 @@ export const useCandidateFormState = ({initialValues = defaultInitialFormValues,
                 .required('Required'),
             idnp: Yup.string()
                 .required('Required')
-                .matches(/(\d){13}/, 'Should have 13 digits'),
+                .matches(/^(\d){13}$/, 'Should have 13 digits'),
             birthDate: Yup.date()
                 .min(MIN_BIRTH_DATE, 'MIN_AGE')
                 .max(MAX_BIRTH_DATE, 'MAX_AGE'),
@@ -48,19 +48,41 @@ export const useCandidateFormState = ({initialValues = defaultInitialFormValues,
             console.log(values)
             setLoading(true)
             const {loading, ...payload} = values;
-                   submitHandler(payload)
-                    .finally(() => setLoading(false))
+            submitHandler(payload)
+                .catch((e) => {
+                    const error = JSON.parse(e?.response?.data?.message);
+                    formik.setStatus({
+                        ...formik.status,
+                        ...error
+                    })
+                })
+                .finally(() => setLoading(false))
 
         }
     });
+
+    const handleChange = (changeEvent) => {
+        const fieldName = changeEvent.target.name;
+        if (formik.status && formik.status[fieldName]) {
+            formik.setFieldTouched(fieldName, false, false);
+
+            formik.setStatus({
+                ...Object.entries(formik.status).filter(([key, value]) => key !== fieldName)
+            })
+        }
+        formik.handleChange(changeEvent);
+
+    }
+
     const setLoading = (loading) => formik.setFieldValue('loading', loading)
 
     const createDefaultPropsForTextField = (fieldName) => {
+        const status = formik.status || {}
         return {
-            onChange: formik.handleChange,
+            onChange: handleChange,
             value: formik.values[fieldName],
-            error: formik.touched[fieldName] && Boolean(formik.errors[fieldName]),
-            helperText: formik.touched[fieldName] && formik.errors[fieldName],
+            error: formik.touched[fieldName] && (Boolean(formik.errors[fieldName]) || Boolean(status[fieldName])),
+            helperText: formik.touched[fieldName] && (formik.errors[fieldName] || status[fieldName]),
             onBlur: formik.handleBlur
         }
     }

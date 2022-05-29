@@ -12,11 +12,10 @@ const AddCandidate = () => {
     const dispatch = useDispatch();
 
     const submitHandler = async (payload) => {
-        CandidatesApi
+        return CandidatesApi
             .addCandidate(payload)
             .then(addedCandidate => dispatch(setAddedCandidate(addedCandidate)))
             .then(() => navigate(ROUTES_PATHS.CANDIDATES))
-            .catch(console.error)
     }
     return (
         <CandidateForm submitHandler={submitHandler}/>

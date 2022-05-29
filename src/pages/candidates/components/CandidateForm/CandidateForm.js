@@ -7,7 +7,7 @@ import {LoadingButton} from "@mui/lab";
 import {MAX_BIRTH_DATE, MIN_BIRTH_DATE, useCandidateFormState} from "./useCandidateFormState";
 import {CandidateFormWrapper} from "./CandidateFormStyles";
 
-const CandidateForm = ({initialValues, submitButtonTitle = 'Add Candidate', formTitle = 'Add Candidate', submitHandler}) => {
+const CandidateForm = ({initialValues, submitButtonTitle = 'Add Candidate', formTitle = 'Add Candidate', submitHandler, isEdit = false}) => {
     const {formik, createDefaultPropsForTextField} = useCandidateFormState({initialValues, submitHandler});
     return (
         <CandidateFormWrapper>
@@ -32,6 +32,10 @@ const CandidateForm = ({initialValues, submitButtonTitle = 'Add Candidate', form
                     label='IDNP'
                     placeholder="Enter candidate IDNP"
                     name="idnp"
+                    inputProps={{
+                        maxLength: 13,
+                        readOnly: isEdit
+                    }}
                     {...createDefaultPropsForTextField('idnp')}
                 />
                 <CustomDatePicker
@@ -77,6 +81,9 @@ const CandidateForm = ({initialValues, submitButtonTitle = 'Add Candidate', form
                     fullWidth label='Email'
                     placeholder="Enter candidate email"
                     name="email"
+                    inputProps={{
+                        readOnly: isEdit
+                    }}
                     {...createDefaultPropsForTextField('email')}
                 />
 

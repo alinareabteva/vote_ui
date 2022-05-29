@@ -36,7 +36,7 @@ const EditCandidate = () => {
     },[params?.id])
 
     const submitForm = (payload) => {
-        CandidatesApi.updateCandidate(payload)
+        return CandidatesApi.updateCandidate(payload)
             .then(data => {
                 navigate(ROUTES_PATHS.CANDIDATES)
             })
@@ -44,7 +44,7 @@ const EditCandidate = () => {
 
     return (
         <>
-            {state.candidate && <CandidateForm submitHandler={submitForm} formTitle="Edit Candidate" submitButtonTitle="Edit Candidate" initialValues={state.candidate}/>}
+            {state.candidate && <CandidateForm submitHandler={submitForm} formTitle="Edit Candidate" submitButtonTitle="Edit Candidate" initialValues={state.candidate} isEdit/>}
         </>
     );
 };
