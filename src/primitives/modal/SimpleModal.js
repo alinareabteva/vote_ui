@@ -15,7 +15,6 @@ const ModalStyle = {
 };
 
 const SimpleModal = ({open, onClose, children = ''}) => {
-    debugger
     return (
         <Modal
             open={open}
@@ -25,7 +24,6 @@ const SimpleModal = ({open, onClose, children = ''}) => {
         >
             <Box sx={ModalStyle}>
                 {children}
-
             </Box>
         </Modal>
     );

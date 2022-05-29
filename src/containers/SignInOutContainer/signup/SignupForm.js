@@ -2,6 +2,7 @@ import React from 'react'
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {AuthApi} from "../../../api/AuthApi"
+import styled from "@emotion/styled"
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 
 import InputLabel from '@mui/material/InputLabel';
@@ -32,6 +33,18 @@ const marginTopEducat = {marginTop: 35}
 const MIN_BIRTH_DATE = moment().subtract(115, 'years');
 const MAX_BIRTH_DATE = moment().endOf('day').subtract(18, 'years');
 
+
+const StyledSignupFormWrapper = styled(Grid)`
+    form {
+      display: flex;
+      flex-direction: column;
+      & > * {
+        margin-top: 0.5rem;
+       
+      }
+    }
+`
+
 const useSignupFormState = (registrationSuccessCallback) => {
     const formik = useFormik({
         initialValues: {
@@ -61,7 +74,7 @@ const useSignupFormState = (registrationSuccessCallback) => {
                 .required('Required'),
             idnp: Yup.string()
                 .required('Required')
-                .matches(/(\d){13}/, 'Should have 13 digits'),
+                .matches(/^(\d){13}$/, 'Should have 13 digits'),
             country: Yup.string()
                 .required('Required')
                 .matches(/^[A-z\-']+$/g, 'Invalid country name format'),
@@ -95,19 +108,39 @@ const useSignupFormState = (registrationSuccessCallback) => {
                 })
                 .catch(e => {
                     //TODO: set errors in the form
+                    const error = JSON.parse(e?.response?.data?.message);
+
+                    formik.setStatus({
+                        ...formik.status,
+                        ...error
+                    })
                     setLoading(false)
                 })
         }
     });
 
+    const handleChange = (changeEvent) => {
+        const fieldName = changeEvent.target.name;
+        if (formik.status && formik.status[fieldName]) {
+            formik.setFieldTouched(fieldName, false, false);
+
+            formik.setStatus({
+                ...Object.entries(formik.status).filter(([key, value]) => key !== fieldName)
+            })
+        }
+        formik.handleChange(changeEvent);
+
+    }
+
     const setLoading = (loading) => formik.setFieldValue('loading', loading)
 
     const createDefaultPropsForTextField = (fieldName) => {
+        const status = formik.status || {}
         return {
-            onChange: formik.handleChange,
+            onChange: handleChange,
             value: formik.values[fieldName],
-            error: formik.touched[fieldName] && Boolean(formik.errors[fieldName]),
-            helperText: formik.touched[fieldName] && formik.errors[fieldName],
+            error: formik.touched[fieldName] &&(Boolean(formik.errors[fieldName]) || Boolean(status[fieldName])),
+            helperText: formik.touched[fieldName] && (formik.errors[fieldName] || status[fieldName]),
             onBlur: formik.handleBlur
         }
     }
@@ -132,7 +165,7 @@ const SignupForm = ({registrationSuccessCallback}) => {
     {/*//todo: view adjustements: paddings etc*/}
 
     return (
-        <Grid>
+        <StyledSignupFormWrapper>
             <Paper style={paperStyle}>
                 <Grid align='center'>
                     <Avatar style={avatarStyle}>
@@ -160,6 +193,9 @@ const SignupForm = ({registrationSuccessCallback}) => {
                         fullWidth label='IDNP'
                         placeholder="Enter your IDNP"
                         name="idnp"
+                        inputProps={{
+                            maxLength: 13
+                        }}
                         {...createDefaultPropsForTextField('idnp')}
                     />
                     <CustomDatePicker
@@ -255,7 +291,7 @@ const SignupForm = ({registrationSuccessCallback}) => {
                                    variant='contained' color='primary'>Sign up</LoadingButton>
                 </form>
             </Paper>
-        </Grid>
+        </StyledSignupFormWrapper>
     )
 }
 
